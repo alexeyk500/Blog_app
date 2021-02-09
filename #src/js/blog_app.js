@@ -21,7 +21,6 @@
       container.append(titleList);
     });
   };
-
   // Рендеринг постов
   function createPostPage(responseJson) {
     responseJson.then((response) => {
@@ -35,7 +34,6 @@
       });
     });
   };
-
   // Создаем и возвращаем заголовок приложения
   function createAppTitle({page, pages, total}) {
       let row = document.createElement('div');
@@ -44,8 +42,8 @@
       row.style.alignItems = 'center';
       let appTitle = document.createElement('h2');
       appTitle.style.marginBottom = '0';
-      appTitle.innerHTML = 'Боложья жизнь в ' + total + ' статьях';
-      appTitle.style.marginRight = '245px';
+      appTitle.innerHTML = 'Боложья жизнь из ' + total + ' статей';
+      appTitle.style.marginRight = '335px';
       let pageStr = document.createElement('p');
       const pageParams = new URLSearchParams(window.location.search);
       console.log('pageParams', pageParams)
@@ -75,7 +73,7 @@
     input.type = 'number';
     input.style.maxWidth = '400px'
     input.style.borderRadius = '10px';
-    input.placeholder = 'Введите номер старицы оглавления блога';
+    input.placeholder = 'Введите номер страницы оглавления блога';
     buttonWrapperGo.classList.add('input-group-append');
     buttonGo.classList.add('btn', 'btn-success');
     buttonGo.style.borderRadius = '10px';
@@ -189,11 +187,13 @@
     const item = document.createElement('li');
     const row = document.createElement('div');
     const item_link = document.createElement('a');
-    item_link.textContent = titleItem.title;
     row.style.whiteSpace = 'nowrap';
     row.style.overflow = 'hidden';
     row.style.marginBottom = '3px';
     row.style.fontSize = '14px';
+    item_link.textContent = titleItem.title;
+    item_link.href = `post.html?id=${titleItem.id}`;
+    item_link.target = '_blank';
     item_link.style.textDecoration = 'none';
     row.append(item_link);
     item.append(row)
@@ -215,24 +215,17 @@
     const pageParams = new URLSearchParams(window.location.search);
     // получаем номер страницы с заголовками постов
     let numPage = pageParams.get('page');
-    console.log('pageParams.get("page")', numPage);
     if (numPage === null) {
       console.log('обнаружил ноль в страницах')
       numPage = 1;
     };
-    console.log('Итоговый numPage = ', numPage)
     return parseInt(numPage);
   };
-
+  // Функция создания приложения
   function createBlogApp () {
     const numPage = getNumCurrentPage();
     const responseJson = getPostsOnPage(numPage);
-    console.log ('responseJson', responseJson);
     renderMainPage(responseJson);
-    //createPostPage(responseJson);
-
   };
-
   window.createBlogApp = createBlogApp;
-
 })();
